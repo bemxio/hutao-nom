@@ -46,11 +46,7 @@ BOOL ReplaceImage(LPCWSTR filename) {
         return FALSE;
     }
 
-    if (!CloseHandle(source) || !CloseHandle(destination)) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
+    return CloseHandle(source) && CloseHandle(destination);
 }
 
 BOOL OverwriteBootloader() {
