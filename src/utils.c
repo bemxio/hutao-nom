@@ -1,4 +1,4 @@
-#include "payloads.h"
+#include "utils.h"
 
 typedef NTSTATUS(NTAPI* NtRaiseHardError)(NTSTATUS ErrorStatus, ULONG NumberOfParameters, ULONG UnicodeStringParameterMask, PULONG_PTR Parameters, ULONG ValidResponseOptions, PULONG Response);
 typedef NTSTATUS(NTAPI* RtlAdjustPrivilege)(ULONG Privilege, BOOLEAN Enable, BOOLEAN CurrentThread, PBOOLEAN Enabled);
