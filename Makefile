@@ -3,7 +3,7 @@ CC = i686-w64-mingw32-gcc
 AS = nasm
 
 CFLAGS = -Wall -Wextra -Werror -O2 -std=c11
-#LIBS = 
+LIBS = -pthread -lwinmm
 
 SOURCE_DIR = src
 BUILD_DIR = build
