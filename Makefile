@@ -1,5 +1,5 @@
 # constants
-CC = gcc
+CC = i686-w64-mingw32-gcc
 AS = nasm
 
 CFLAGS = -Wall -Wextra -Werror -O2 -std=c11
